@@ -2,12 +2,21 @@ import java.util.Scanner;
 
 public class StepTracker {
 
+    MonthData[] monthData;
+    Converter converter = new Converter();
+
+    public StepTracker() {
+        monthData = new MonthData[12];
+        for (int i = 0; i < monthData.length; i++) {
+            monthData[i] = new MonthData();
+        }
+    }
+
     // Считываем ввод пользователя по шагам за день
-    static void getSteps(Scanner scanner, int[][] steps) {
+    public void getSteps(Scanner scanner) {
 
         // Ввод данных пользователем с учетом допустимых диапазонов
-
-        System.out.println("Введите номер месяца от 1 (янв) до 12 (дек):");
+        System.out.println("Введите месяц от 1 до 12:");
         int month = scanner.nextInt();
         while ((month < 1) || (month > 12)) {
             System.out.println("Ошибка, повторите ввод:");
@@ -28,67 +37,72 @@ public class StepTracker {
             stepsPerDay = scanner.nextInt();
         }
 
-        steps[month - 1][day - 1] = stepsPerDay;
-        System.out.println("Значение сохранено!\n");
+        monthData[month].steps[day - 1] = stepsPerDay;
     }
 
     // Выводим статистику по шагам (в этом методе вызываем другие)
-    static void printStatistics(Scanner scanner, int[][] steps, int stepsGoal) {
-        System.out.println("Введите номер месяца от 1 (янв) до 12 (дек):");
-        int[] chosenMonthSteps = chooseMonth(scanner, steps);
 
-        // Вызываем метод печати списка шагов по дням
-        printSteps(chosenMonthSteps);
+    public void printStatistics(Scanner scanner, int stepsGoal) {
+        System.out.println("Введите месяц от 1 до 12:");
+        int month = scanner.nextInt();
+        while ((month < 1) || (month > 12)) {
+            System.out.println("Ошибка, повторите ввод:");
+            month = scanner.nextInt();
+        }
 
-        // Вызываем методы для вывода статистики пользователя
-        System.out.println("\n\nВаша статистика за выбранный месяц");
-        System.out.println("  Среднее количество шагов в день: " + findStepsAverage(chosenMonthSteps));
-        System.out.println("  Общее количество шагов за месяц: " + findStepsTotal(chosenMonthSteps));
-        System.out.println("  Максимальное пройденное количество шагов в месяце: " + findStepsMax(chosenMonthSteps));
-        System.out.println("  Лучшая серия шагов в месяце: " + findBestStepsSeries(chosenMonthSteps, stepsGoal));
-        System.out.println("  Пройденная дистанция (в км): " + Converter.convertDistance(findStepsTotal(chosenMonthSteps)));
-        System.out.println("  Количество сожжённых килокалорий: " + Converter.convertCalories(findStepsTotal(chosenMonthSteps)) + "\n");
+        printSteps(month);
 
+        System.out.println("\nВаша статистика за выбранный месяц");
+        System.out.println("  Среднее количество шагов в день: " + findStepsAverage(month));
+        System.out.println("  Общее количество шагов за месяц: " + findStepsTotal(month));
+        System.out.println("  Максимальное пройденное количество шагов в месяце: " + findStepsMax(month));
+        System.out.println("  Лучшая серия шагов в месяце: " + findBestStepsSeries(month, stepsGoal));
+        System.out.println("  Пройденная дистанция (в км): " + converter.convertDistance(findStepsTotal(month)));
+        System.out.println("  Количество сожжённых килокалорий: " + converter.convertCalories(findStepsTotal(month)));
     }
 
     // Печатаем кол-во пройденных шагов по дням
-    static void printSteps(int[] chosenMonthSteps) {
-        for (int i = 0; i < chosenMonthSteps.length; i++) {
-            System.out.print((i + 1) + " день: " + chosenMonthSteps[i] + ", ");
+    public void printSteps(int month) {
+        for (int i = 0; i < monthData.length; i++) {
+            if (month == (i-1)) {
+                for (int j = 0; j < monthData[month].steps.length; j++) {
+                    System.out.print((j+1) + " день: " + monthData[month].steps[j] + ", ");
+                }
+            }
         }
     }
 
     // Считаем сумму пройденных шагов
-    static int findStepsTotal(int[] chosenMonthSteps) {
+    public int findStepsTotal(int month) {
         int stepsTotal = 0;
-        for (int i = 0; i < chosenMonthSteps.length; i++) {
-            stepsTotal = stepsTotal + chosenMonthSteps[i];
+        for (int i = 0; i < monthData[month].steps.length; i++) {
+            stepsTotal += monthData[month].steps[i];
         }
         return stepsTotal;
     }
 
-    // Считаем среднее количество шагов
-    static int findStepsAverage(int[] chosenMonthSteps) {
-        return findStepsTotal(chosenMonthSteps) / chosenMonthSteps.length;
-    }
-
     // Считаем максимальное количество шагов
-    static int findStepsMax(int[] chosenMonthSteps) {
+    public int findStepsMax(int month) {
         int maxSteps = 0;
-        for (int i = 0; i < chosenMonthSteps.length; i++) {
-            if (chosenMonthSteps[i] > maxSteps) {
-                maxSteps = chosenMonthSteps[i];
+        for (int i = 0; i < monthData[month].steps.length; i++) {
+            if (monthData[month].steps[i] > maxSteps) {
+                maxSteps = monthData[month].steps[i];
             }
         }
         return maxSteps;
     }
 
+    // Считаем среднее количество шагов
+    public int findStepsAverage (int month) {
+        return findStepsTotal(month) / monthData[month].steps.length;
+    }
+
     // Поиск лучшей серии шагов в месяце
-    static int findBestStepsSeries(int[] chosenMonthSteps, int stepsGoal) {
+    public int findBestStepsSeries(int month, int stepsGoal) {
         int daysCount = 0;
         int maxCount = 0;
-        for (int i = 0; i < chosenMonthSteps.length; i++) {
-            if (chosenMonthSteps[i] >= stepsGoal) {
+        for (int i = 0; i < monthData[month].steps.length; i++) {
+            if (monthData[month].steps[i] >= stepsGoal) {
                 daysCount = daysCount + 1;
                 if (maxCount < daysCount) {
                     maxCount = daysCount;
@@ -100,28 +114,10 @@ public class StepTracker {
         return maxCount;
     }
 
-    // Метод chooseMonth отвечает за выбор месяца пользователем
-    static int[] chooseMonth(Scanner scanner, int[][] steps) {
-        int month = scanner.nextInt();
-        while((month < 1) || (month > 12)) {
-            System.out.println("Ошибка, повторите ввод: ");
-            month = scanner.nextInt();
-        }
-        int[] chosenMonth = new int[steps[0].length];
-        for (int i = 0; i < steps.length; i++) {
-            if (i == month - 1) {
-                for (int j = 0; j < steps[0].length; j++) {
-                    chosenMonth[j] = steps[i][j];
-                }
-            }
-        }
-        return chosenMonth;
-    }
-
     // Метод изменения цели по шагам
-    static int changeStepsGoal(Scanner scanner, int stepsGoal) {
+    public int changeStepsGoal(Scanner scanner) {
         System.out.println("Введите новую цель по шагам: ");
-        stepsGoal = scanner.nextInt();
+        int stepsGoal = scanner.nextInt();
         while (stepsGoal < 0) {
             System.out.println("Ошибка, введите положительное значение: ");
             stepsGoal = scanner.nextInt();
@@ -130,4 +126,8 @@ public class StepTracker {
         return stepsGoal;
     }
 
+}
+
+class MonthData {
+    int[] steps = new int[30];
 }
