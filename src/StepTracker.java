@@ -4,8 +4,10 @@ public class StepTracker {
 
     MonthData[] monthData;
     Converter converter = new Converter();
+    Scanner scanner = new Scanner(System.in); // создал поле с переменной типа Scanner
 
-    public StepTracker() {
+
+    public StepTracker(Scanner scanner) { // не понял, зачем передавать Scanner scanner в контруктор, если параметр не будет использован?
         monthData = new MonthData[12];
         for (int i = 0; i < monthData.length; i++) {
             monthData[i] = new MonthData();
@@ -13,7 +15,7 @@ public class StepTracker {
     }
 
     // Считываем ввод пользователя по шагам за день
-    public void getSteps(Scanner scanner) {
+    public void getSteps() { // метод же считывает поле класса, не параметр конструктрора?
 
         // Ввод данных пользователем с учетом допустимых диапазонов
         System.out.println("Введите месяц от 1 до 12:");
@@ -42,7 +44,7 @@ public class StepTracker {
 
     // Выводим статистику по шагам (в этом методе вызываем другие)
 
-    public void printStatistics(Scanner scanner, int stepsGoal) {
+    public void printStatistics(int stepsGoal) {
         System.out.println("Введите месяц от 1 до 12:");
         int month = scanner.nextInt();
         while ((month < 1) || (month > 12)) {
@@ -103,7 +105,7 @@ public class StepTracker {
         int maxCount = 0;
         for (int i = 0; i < monthData[month].steps.length; i++) {
             if (monthData[month].steps[i] >= stepsGoal) {
-                daysCount = daysCount + 1;
+                daysCount += 1;
                 if (maxCount < daysCount) {
                     maxCount = daysCount;
                 }
@@ -115,7 +117,7 @@ public class StepTracker {
     }
 
     // Метод изменения цели по шагам
-    public int changeStepsGoal(Scanner scanner) {
+    public int changeStepsGoal() {
         System.out.println("Введите новую цель по шагам: ");
         int stepsGoal = scanner.nextInt();
         while (stepsGoal < 0) {

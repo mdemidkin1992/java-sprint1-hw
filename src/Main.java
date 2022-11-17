@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        StepTracker stepTracker = new StepTracker();
+        StepTracker stepTracker = new StepTracker(scanner); // кажется, что если тут и из контруктора убрать scanner, то результат все равно будет верный
         int stepsGoal = 10_000;
 
 
@@ -14,11 +14,11 @@ public class Main {
             int userInput = scanner.nextInt();
 
             if (userInput == 1) {
-                stepTracker.getSteps(scanner);
+                stepTracker.getSteps();
             } else if (userInput == 2) {
-                stepTracker.printStatistics(scanner, stepsGoal);
+                stepTracker.printStatistics(stepsGoal);
             } else if (userInput == 3) {
-                stepsGoal = stepTracker.changeStepsGoal(scanner);
+                stepsGoal = stepTracker.changeStepsGoal();
             } else if (userInput == 4) {
                 System.out.println("Выход из приложения");
                 break;
