@@ -1,18 +1,21 @@
 public class Converter {
 
+    // iStepCount писал с i чтобы указать, что тип переменной int
+    // далее через Double.valueOf() переводил тип int в double
+    // Понял, что так не принято, не буду :)
+
+    // поля класса Converter
+    double STEP_SIZE = 0.00075; // км в шаге
+    double CALORIES_IN_STEP = 50; // калорий в шаге
+    double CALORIES_IN_K_CAL = 1_000; // калорий в килокалории
+
     // Количество пройденных километров
-    // 1 шаг = 75 см
-    public double convertDistance (int iStepCount) {
-        final double cnst = 0.75 / 1_000;
-        double dStepCount = Double.valueOf(iStepCount);
-        return dStepCount * cnst;
+    public double convertDistance (long stepCount) {
+        return stepCount * STEP_SIZE;
     }
 
     // Количество сожжённых килокалорий
-    // 1 шаг = 50 калорий, 1 килокалория = 1 000 калорий
-    public double convertCalories (int iStepCount) {
-        final double cnst = 50.0 / 1_000;
-        double dStepCount = Double.valueOf(iStepCount);
-        return dStepCount * cnst;
+    public double convertCalories (long stepCount) {
+        return stepCount * CALORIES_IN_STEP / CALORIES_IN_K_CAL;
     }
 }
