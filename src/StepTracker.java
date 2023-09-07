@@ -1,23 +1,20 @@
 import java.util.Scanner;
 
 public class StepTracker {
-
     MonthData[] monthData;
     Converter converter = new Converter();
-    Scanner scanner = new Scanner(System.in); // создал поле с переменной типа Scanner
+    Scanner scanner;
 
 
-    public StepTracker(Scanner scanner) { // не понял, зачем передавать Scanner scanner в контруктор, если параметр не будет использован?
+    public StepTracker(Scanner scanner) {
+        this.scanner = scanner;
         monthData = new MonthData[12];
         for (int i = 0; i < monthData.length; i++) {
             monthData[i] = new MonthData();
         }
     }
 
-    // Считываем ввод пользователя по шагам за день
-    public void getSteps() { // метод же считывает поле класса, не параметр конструктрора?
-
-        // Ввод данных пользователем с учетом допустимых диапазонов
+    public void getSteps() {
         System.out.println("Введите месяц от 1 до 12:");
         int month = scanner.nextInt();
         while ((month < 1) || (month > 12)) {
@@ -42,8 +39,6 @@ public class StepTracker {
         monthData[month].steps[day - 1] = stepsPerDay;
     }
 
-    // Выводим статистику по шагам (в этом методе вызываем другие)
-
     public void printStatistics(int stepsGoal) {
         System.out.println("Введите месяц от 1 до 12:");
         int month = scanner.nextInt();
@@ -63,7 +58,6 @@ public class StepTracker {
         System.out.println("  Количество сожжённых килокалорий: " + converter.convertCalories(findStepsTotal(month)));
     }
 
-    // Печатаем кол-во пройденных шагов по дням
     public void printSteps(int month) {
         for (int i = 0; i < monthData.length; i++) {
             if (month == (i-1)) {
@@ -74,7 +68,6 @@ public class StepTracker {
         }
     }
 
-    // Считаем сумму пройденных шагов
     public int findStepsTotal(int month) {
         int stepsTotal = 0;
         for (int i = 0; i < monthData[month].steps.length; i++) {
@@ -83,7 +76,6 @@ public class StepTracker {
         return stepsTotal;
     }
 
-    // Считаем максимальное количество шагов
     public int findStepsMax(int month) {
         int maxSteps = 0;
         for (int i = 0; i < monthData[month].steps.length; i++) {
@@ -94,12 +86,10 @@ public class StepTracker {
         return maxSteps;
     }
 
-    // Считаем среднее количество шагов
     public int findStepsAverage (int month) {
         return findStepsTotal(month) / monthData[month].steps.length;
     }
 
-    // Поиск лучшей серии шагов в месяце
     public int findBestStepsSeries(int month, int stepsGoal) {
         int daysCount = 0;
         int maxCount = 0;
@@ -116,7 +106,6 @@ public class StepTracker {
         return maxCount;
     }
 
-    // Метод изменения цели по шагам
     public int changeStepsGoal() {
         System.out.println("Введите новую цель по шагам: ");
         int stepsGoal = scanner.nextInt();

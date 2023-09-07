@@ -1,13 +1,10 @@
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
-        StepTracker stepTracker = new StepTracker(scanner); // кажется, что если тут и из контруктора убрать scanner, то результат все равно будет верный
+        StepTracker stepTracker = new StepTracker(scanner);
         int stepsGoal = 10_000;
-
 
         while (true) {
             printMenu();
@@ -25,12 +22,9 @@ public class Main {
             } else {
                 System.out.println("Такой команды пока нет");
             }
-
         }
-
     }
 
-    // Метод вызова меню
     public static void printMenu() {
         System.out.println("Выберите действие: " + "\n" +
                 "1. Ввести количество шагов за определённый день;" + "\n" +
