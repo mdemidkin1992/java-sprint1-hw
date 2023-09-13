@@ -1,13 +1,11 @@
-# java-sprint1-hw
+### Calorie Counter
 
-### Счетчик калорий
+#### Main functionality
+- Console interface for program management.
+- Storage of data on the number of steps taken over several months.
+- Input of a daily step goal.
+- Input of the number of steps taken each day.
+- Displaying statistics for a specific month.
 
-#### Основной функционал
-- консольный интерфейс для управления программой;
-- хранение данных о количестве пройденных шагов за несколько месяцев;
-- ввод цели по количеству шагов в день;
-- ввод пройденного количества шагов за день;
-- вывод статистики за определённый месяц.
-
-#### Основной функционал
+#### System requirements
 - JDK 11
